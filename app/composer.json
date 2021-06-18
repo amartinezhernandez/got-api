@@ -1,0 +1,13 @@
+{
+    "name": "amartinezhernandez/php-skeleton",
+    "description": "PHP Skeleton for new projects",
+    "type": "project",
+    "license": "MIT License",
+    "authors": [
+        {
+            "name": "Alberto Martinez",
+            "email": "albmartinez89@gmail.com"
+        }
+    ],
+    "require": {}
+}

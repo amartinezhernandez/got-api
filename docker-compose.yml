@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    container_name: skeleton_web_1
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./etc/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./app:/app
+  php:
+    container_name: skeleton_php_1
+    image: php:8.0-fpm
+    build:
+      context: ./docker/php
+    volumes:
+      - ./app:/app
+  mysql:
+    container_name: skeleton_mysql_1
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./etc/mysql/initdb/:/docker-entrypoint-initdb.d
+      - ./.mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    command:
+      mysqld --sql_mode=""
