@@ -1,5 +1,7 @@
 .PHONY: all test
 
+USER_ID:=$(shell id -u)
+
 COMMAND_COLOR := $(shell tput -Txterm setaf 2)
 HELP_COLOR := $(shell tput -Txterm setaf 4)
 RESET := $(shell tput -Txterm sgr0)
@@ -20,6 +22,16 @@ down: ## Docker down
 build: ## Builds docker
 	docker-compose build
 nginx: ## Access nginx bash
-	docker exec -it -w /app skeleton_web_1 /bin/sh
-php: ## Access PHP1 bash
-	docker exec -it -w /app skeleton_php_1 /bin/sh
+	docker exec -it -w /app got_api_web_1 /bin/sh
+php: ## Access PHP bash
+	docker exec -it -w /app got_api_php_1 /bin/sh
+composer-install: ## Installs composer dependencies
+	docker exec -it got_api_php_1 /bin/sh -c "cd /app && composer install"
+migration-run: ## Executes DB migrations
+	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx migrate"
+migration: ## Creates a new DB migration
+	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx create ${NAME} && chown ${USER_ID}:${USER_ID} /app/migrations/*"
+seed: ## Creates a new seeder
+	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx seed:create ${NAME} && chown ${USER_ID}:${USER_ID} /app/seeds/*"
+seed-run: ## Executes DB seeders
+	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx seed:run"

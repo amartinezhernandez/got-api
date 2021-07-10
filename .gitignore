@@ -1,2 +1,4 @@
 .mysql_data
 .idea
+docs
+app/env/env.json
