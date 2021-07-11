@@ -14,5 +14,5 @@ return static function (App $app) {
     });
 
     $app->get('/', WelcomeAction::class);
-    $app->get('/{id}', CharacterDeleteAction::class);
+    $app->delete('/{id}', CharacterDeleteAction::class);
 };
