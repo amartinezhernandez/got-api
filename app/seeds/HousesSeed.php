@@ -7,7 +7,12 @@ class HousesSeed extends AbstractSeed
 {
     public function run()
     {
-        $data = [
+        $this->insert("got.houses", self::housesData());
+    }
+
+    public static function housesData(): array
+    {
+        return [
             [
                 'id' => 1,
                 'name' => 'Targaryen'
@@ -61,7 +66,5 @@ class HousesSeed extends AbstractSeed
                 'name' => 'Bolton'
             ]
         ];
-
-        $this->insert("got.houses", $data);
     }
 }
