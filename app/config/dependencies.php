@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Infrastructure\Slim\Setting\ConfigLoader;
 use App\Infrastructure\Slim\Setting\SettingsInterface;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
@@ -24,6 +25,9 @@ return static function (ContainerBuilder $containerBuilder) {
             $logger->pushHandler($handler);
 
             return $logger;
+        },
+        ConfigLoader::class => function (ContainerInterface $c) {
+            return new ConfigLoader(__DIR__ . "/../env/env.json");
         }
     ]);
 };

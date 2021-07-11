@@ -2,3 +2,4 @@
 .idea
 docs
 app/env/env.json
+app/vendor
