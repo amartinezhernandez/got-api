@@ -27,6 +27,14 @@ $settings($containerBuilder);
 $dependencies = require __DIR__ . '/../config/dependencies.php';
 $dependencies($containerBuilder);
 
+// Set up usecases
+$usecases = require __DIR__ . '/../config/usecases.php';
+$usecases($containerBuilder);
+
+// Set up repositories
+$repositories = require __DIR__ . '/../config/repositories.php';
+$repositories($containerBuilder);
+
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
 

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Infrastructure\Slim\Action\Character\CharacterDeleteAction;
 use App\Infrastructure\Slim\Action\Hello\WelcomeAction;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -13,4 +14,5 @@ return static function (App $app) {
     });
 
     $app->get('/', WelcomeAction::class);
+    $app->get('/{id}', CharacterDeleteAction::class);
 };

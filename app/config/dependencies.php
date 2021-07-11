@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use App\Infrastructure\Slim\Setting\ConfigLoader;
 use App\Infrastructure\Slim\Setting\SettingsInterface;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;

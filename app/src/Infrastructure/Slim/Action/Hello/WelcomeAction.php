@@ -8,9 +8,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class WelcomeAction extends Action
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function action(): Response
     {
         return $this->respondWithData([
