@@ -61,6 +61,5 @@ final class AddCharactersTable extends AbstractMigration
             )
 
             ->create();
-
     }
 }
