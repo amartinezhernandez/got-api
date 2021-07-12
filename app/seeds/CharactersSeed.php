@@ -11,11 +11,11 @@ class CharactersSeed extends AbstractSeed
     private array $charactersRelations = [];
 
     private const RELATION_TYPES = [
-        'sibling' => "siblings",
+        'siblings' => "siblings",
         'killer' => "killed",
         'parent' => "parentOf",
         'serves' => "serves",
-        'married_engaged' => "marriedEngaged",
+        'marriedEngaged' => "marriedEngaged",
         'guarded' => 'guardedBy'
     ];
 

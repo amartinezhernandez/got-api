@@ -30,11 +30,11 @@ final class AddCharacterRelationsTable extends AbstractMigration
                 MysqlAdapter::PHINX_TYPE_ENUM,
                 [
                     'values' => [
-                        'sibling',
+                        'siblings',
                         'killer',
                         'parent',
                         'serves',
-                        'married_engaged',
+                        'marriedEngaged',
                         'guarded'
                     ],
                     'null' => false

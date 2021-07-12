@@ -6,6 +6,7 @@ use JsonSerializable;
 
 class Character implements JsonSerializable
 {
+    private int $id;
     private string $name;
     private ?string $link;
     private ?string $thumbnail;
@@ -17,6 +18,7 @@ class Character implements JsonSerializable
     private array $relations;
 
     public function __construct(
+        int $id,
         string $name,
         ?string $link,
         ?string $thumbnail,
@@ -27,6 +29,7 @@ class Character implements JsonSerializable
         array $houses = [],
         array $relations = []
     ) {
+        $this->id = $id;
         $this->name = $name;
         $this->link = $link;
         $this->thumbnail = $thumbnail;
@@ -36,6 +39,11 @@ class Character implements JsonSerializable
         $this->actors = $actors;
         $this->houses = $houses;
         $this->relations = $relations;
+    }
+
+    public function id(): int
+    {
+        return $this->id;
     }
 
     public function name(): string
@@ -83,6 +91,10 @@ class Character implements JsonSerializable
         return $this->relations;
     }
 
+    public function setRelations(array $relations): void
+    {
+        $this->relations = $relations;
+    }
 
     public function jsonSerialize(): array
     {
@@ -103,13 +115,18 @@ class Character implements JsonSerializable
             $character['royal'] = $this->royal();
         }
         $character = array_merge($character, $this->relations());
-        $character['houseName'] = count($characterHouses = $this->houses()) ? reset($characterHouses) : $characterHouses;
 
-        if (count($actor = $this->actors()) > 0) {
+        if ($totalHouses = count($characterHouses = $this->houses())) {
+            $character['houseName'] = $totalHouses == 1 ? reset($characterHouses) : $characterHouses;
+        }
+
+        $totalActors = count($actor = $this->actors());
+
+        if ($totalActors > 1) {
+            $character['actors'] = $this->actors();
+        } elseif ($totalActors == 1) {
             $actor = reset($actor);
             $character = array_merge($character, $actor->jsonSerialize());
-        } else {
-            $character['actors'] = $this->actors();
         }
 
         return $character;

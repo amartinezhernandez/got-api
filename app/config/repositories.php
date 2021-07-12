@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Infrastructure\Repository\MySql\Character\MySqlCharacterReaderRepository;
 use App\Infrastructure\Repository\MySql\Character\MySqlCharacterWriterRepository;
 use App\Infrastructure\Repository\MySql\PDODataAccess;
 use App\Infrastructure\Slim\Setting\ConfigLoader;
@@ -23,6 +24,8 @@ return static function (ContainerBuilder $containerBuilder) {
         },
         MySqlCharacterWriterRepository::class => function (ContainerInterface $c) {
             return new MySqlCharacterWriterRepository($c->get(PDODataAccess::class));
-        }
+        },MySqlCharacterReaderRepository::class => function (ContainerInterface $c) {
+            return new MySqlCharacterReaderRepository($c->get(PDODataAccess::class));
+        },
     ]);
 };
