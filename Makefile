@@ -17,6 +17,8 @@ help: ## List available commands
 
 up: ## Docker up
 	docker-compose up
+up-d: ## Docker up detached
+	docker-compose up -d
 down: ## Docker down
 	docker-compose down
 build: ## Builds docker
@@ -35,3 +37,19 @@ seed: ## Creates a new seeder
 	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx seed:create ${NAME} && chown ${USER_ID}:${USER_ID} /app/seeds/*"
 seed-run: ## Executes DB seeders
 	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx seed:run"
+install: ## Installs the Api
+	@echo "\e[32mBuilding docker images\e[39m\n"
+	@make build
+	@echo "\e[32mInstalling composer dependencies...\e[39m\n"
+	@make composer-install
+	@echo "\e[32mBuilding database...\e[39m\n"
+	@make migration-run
+	@echo "\e[32mSeeding data to the database...\e[39m\n"
+	@make seed-run
+	@echo "\e[32mRebooting containers...\e[39m\n"
+	@make down
+	@make up-d
+	@echo "\e[32mAll done! You can now check the database of GOT Characters :)\e[39m\n"
+
+
+
