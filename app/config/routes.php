@@ -19,6 +19,6 @@ return static function (App $app) {
     $app->get('/', CharacterListAction::class);
     $app->get('/search', CharacterSearchAction::class);
     $app->post('/', CharacterCreateAction::class);
-    $app->patch('/', CharacterUpdateAction::class);
+    $app->patch('/{id}', CharacterUpdateAction::class);
     $app->delete('/{id}', CharacterDeleteAction::class);
 };

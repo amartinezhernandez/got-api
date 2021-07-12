@@ -4,14 +4,14 @@ namespace App\Domain\Actor;
 
 class ActorFactory
 {
-    public static function fromMysqlRows(array $actors): array
+    public static function fromMysqlRowsOrRequest(array $actors): array
     {
         return array_map(function ($actor) {
-            return self::fromMysqlRow($actor);
+            return self::fromMysqlRowOrRequest($actor);
         }, $actors);
     }
 
-    public static function fromMysqlRow(array $actor): Actor
+    public static function fromMysqlRowOrRequest(array $actor): Actor
     {
         return new Actor(
             $actor['name'],

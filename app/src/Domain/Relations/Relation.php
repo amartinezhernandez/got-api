@@ -4,10 +4,10 @@ namespace App\Domain\Relations;
 
 class Relation
 {
-    private int $characterId;
-    private string $characterName;
-    private int $relatedId;
-    private string $relatedName;
+    private ?int $characterId;
+    private ?string $characterName;
+    private ?int $relatedId;
+    private ?string $relatedName;
     private string $relation;
 
     private const RELATION_ACTIONS = [
@@ -30,10 +30,10 @@ class Relation
     ];
 
     public function __construct(
-        int $characterId,
-        string $characterName,
-        int $relatedId,
-        string $relatedName,
+        ?int $characterId,
+        ?string $characterName,
+        ?int $relatedId,
+        ?string $relatedName,
         string $relation
     ) {
         $this->characterId = $characterId;
@@ -43,22 +43,22 @@ class Relation
         $this->relation = $relation;
     }
 
-    public function characterId(): int
+    public function characterId(): ?int
     {
         return $this->characterId;
     }
 
-    public function characterName(): string
+    public function characterName(): ?string
     {
         return $this->characterName;
     }
 
-    public function relatedId(): int
+    public function relatedId(): ?int
     {
         return $this->relatedId;
     }
 
-    public function relatedName(): string
+    public function relatedName(): ?string
     {
         return $this->relatedName;
     }
@@ -81,7 +81,7 @@ class Relation
         return $this->isCharacter($id) ? $this->relatedName() : $this->characterName();
     }
 
-    private function isCharacter(int $id): bool
+    public function isCharacter(int $id): bool
     {
         return $this->characterId() == $id;
     }

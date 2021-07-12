@@ -10,4 +10,11 @@ abstract class MySqlAbstractRepository
     {
         $this->pdo = $pdo;
     }
+
+    protected function buildIdParameters(array &$parameters, int ...$ids): void
+    {
+        array_walk($ids, function ($id, $key) use (&$parameters) {
+            $parameters[":id{$key}"] = $id;
+        });
+    }
 }

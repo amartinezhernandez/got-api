@@ -21,4 +21,18 @@ class RelationFactory
             $relation['relation']
         );
     }
+
+    public static function fromRequestData(array $relations): array
+    {
+        return array_map(function ($relation) {
+            $isPassiveRelation = isset($relation['passive']) && $relation['passive'] == 1;
+            return new Relation(
+                $isPassiveRelation ? $relation['character_id'] : null,
+                null,
+                $isPassiveRelation ? null : $relation['character_id'],
+                null,
+                $relation['relation']
+            );
+        }, $relations);
+    }
 }

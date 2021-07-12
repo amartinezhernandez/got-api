@@ -6,7 +6,7 @@ use JsonSerializable;
 
 class Character implements JsonSerializable
 {
-    private int $id;
+    private ?int $id;
     private string $name;
     private ?string $link;
     private ?string $thumbnail;
@@ -18,7 +18,7 @@ class Character implements JsonSerializable
     private array $relations;
 
     public function __construct(
-        int $id,
+        ?int $id,
         string $name,
         ?string $link,
         ?string $thumbnail,
@@ -41,7 +41,7 @@ class Character implements JsonSerializable
         $this->relations = $relations;
     }
 
-    public function id(): int
+    public function id(): ?int
     {
         return $this->id;
     }

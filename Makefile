@@ -7,7 +7,7 @@ HELP_COLOR := $(shell tput -Txterm setaf 4)
 RESET := $(shell tput -Txterm sgr0)
 CYAN := $(shell tput -Txterm setaf 6)
 
-help: ## Listar comandos disponibles en este Makefile
+help: ## List available commands
 	@echo "╔══════════════════════════════════════════════════════════════════════════════╗"
 	@echo "║                           ${CYAN}.:${RESET} AVAILABLE COMMANDS ${CYAN}:.${RESET}                           ║"
 	@echo "╚══════════════════════════════════════════════════════════════════════════════╝"

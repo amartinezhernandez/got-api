@@ -66,11 +66,4 @@ class MySqlCharacterReaderRepository extends MySqlAbstractRepository implements 
 
         return RelationFactory::fromMysqlRows($this->pdo->query($sql, $parameters));
     }
-
-    private function buildIdParameters(array &$parameters, int ...$ids): void
-    {
-        array_walk($ids, function ($id, $key) use (&$parameters) {
-            $parameters[":id{$key}"] = $id;
-        });
-    }
 }

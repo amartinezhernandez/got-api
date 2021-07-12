@@ -3,6 +3,7 @@
 namespace App\Domain\Character;
 
 use App\Domain\Actor\ActorFactory;
+use App\Domain\Relations\RelationFactory;
 
 class CharacterFactory
 {
@@ -24,7 +25,7 @@ class CharacterFactory
             $character['full_image'],
             $character['nickname'],
             $character['royal'] == 1,
-            ActorFactory::fromMysqlRows($character['actors']),
+            ActorFactory::fromMysqlRowsOrRequest($character['actors']),
             $character['houses']
         );
     }
@@ -71,5 +72,21 @@ class CharacterFactory
             }
         }
         return $formattedCharacters;
+    }
+
+    public static function fromRequestData(array $requestData): Character
+    {
+        return new Character(
+            $requestData['id'] ?? null,
+            $requestData['name'],
+            $requestData['link'] ?? null,
+            $requestData['thumbnail'] ?? null,
+            $requestData['full_image'] ?? null,
+            $requestData['nickname'] ?? null,
+            isset($requestData['royal']) && $requestData['royal'] == 1,
+            isset($requestData['actors']) ? ActorFactory::fromMysqlRowsOrRequest($requestData['actors']) : [],
+            $requestData['houses'] ?? [],
+            isset($requestData['relations']) ? RelationFactory::fromRequestData($requestData['relations']) : [],
+        );
     }
 }
