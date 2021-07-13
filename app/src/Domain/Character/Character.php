@@ -114,6 +114,9 @@ class Character implements JsonSerializable
         if ($this->royal()) {
             $character['royal'] = $this->royal();
         }
+        if ($this->nickname()) {
+            $character['nickname'] = $this->nickname();
+        }
         $character = array_merge($character, $this->relations());
 
         if ($totalHouses = count($characterHouses = $this->houses())) {

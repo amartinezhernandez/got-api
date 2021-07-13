@@ -20,5 +20,18 @@ Your app will be running on 127.0.0.1:80. If you want to run it with a host, jus
 127.0.0.1       local.got.test
 ```
 
+## Commands
+
+Execute the next command to list the commands available
+```
+make help
+```
+
+## Testing and coverage
+To generate the code reports, execute the next command. The report files will be generated on /app/test/report
+```
+make test-coverage
+```
+
 ## Author
 - Alberto Martínez Hernández

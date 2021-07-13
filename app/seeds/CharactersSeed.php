@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Seeds;
 
 use Phinx\Seed\AbstractSeed;
@@ -22,6 +23,13 @@ class CharactersSeed extends AbstractSeed
     public function run()
     {
         $this->processData();
+        $this->execute(
+            "TRUNCATE TABLE got.characters;
+            TRUNCATE TABLE got.characters_actors;
+            TRUNCATE TABLE got.characters_houses;
+            TRUNCATE TABLE got.characters_relations;"
+        );
+
         $this->insert("got.characters", $this->characters);
         $this->insert("got.characters_houses", $this->charactersHouses);
         $this->insert("got.characters_actors", $this->charactersActors);

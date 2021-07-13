@@ -36,11 +36,17 @@ migration: ## Creates a new DB migration
 seed: ## Creates a new seeder
 	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx seed:create ${NAME} && chown ${USER_ID}:${USER_ID} /app/seeds/*"
 seed-run: ## Executes DB seeders
-	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx seed:run"
+	docker exec -i got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx seed:run"
 test: ## PHPUnit test without coverage
-	docker-compose run --rm -T php /bin/sh -c 'cd /app && ./vendor/bin/phpunit --no-coverage --color=always'
+	@make seed-run > /dev/null
+	@docker-compose run --rm -T php /bin/sh -c 'cd /app && ./vendor/bin/phpunit --no-coverage --color=always'
+	@make seed-run > /dev/null
 test-coverage: ## PHPUnit test with coverage
-	docker-compose run --rm -T php /bin/sh -c 'cd /app && ./vendor/bin/phpunit --color=always'
+	@make seed-run > /dev/null
+	@docker-compose run --rm -T php /bin/sh -c 'cd /app && ./vendor/bin/phpunit --color=always'
+	@make seed-run > /dev/null
+add-hooks: ## Configurar git hook pre-commit
+	@cd .git/hooks && ln -s ../../pre-commit pre-commit || echo 'Git Hooks already added.'
 install: ## Installs the Api
 	@echo "\e[32mBuilding docker images\e[39m\n"
 	@make build
@@ -50,6 +56,8 @@ install: ## Installs the Api
 	@make migration-run
 	@echo "\e[32mSeeding data to the database...\e[39m\n"
 	@make seed-run
+	@echo "\e[32mAdding git hooks...\e[39m\n"
+	@make add-hooks
 	@echo "\e[32mRebooting containers...\e[39m\n"
 	@make down
 	@make up-d

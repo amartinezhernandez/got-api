@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Seeds;
 
 use Phinx\Seed\AbstractSeed;
@@ -7,6 +8,7 @@ class HousesSeed extends AbstractSeed
 {
     public function run()
     {
+        $this->execute("TRUNCATE TABLE got.houses;");
         $this->insert("got.houses", self::housesData());
     }
 

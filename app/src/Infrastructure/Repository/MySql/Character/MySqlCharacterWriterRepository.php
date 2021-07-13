@@ -28,6 +28,31 @@ class MySqlCharacterWriterRepository extends MySqlAbstractRepository implements 
         return $this->pdo->insert($sql, $parameters);
     }
 
+    public function update(Character $character): bool
+    {
+        $sql = "UPDATE got.characters SET
+            name = :name,
+            link = :link,
+            thumbnail = :thumbnail,
+            full_image = :full_image,
+            royal = :royal,
+            nickname = :nickname
+        WHERE id = :id;";
+
+        $parameters = [
+            ':id' => $character->id(),
+            ':name' => $character->name(),
+            ':link' => $character->link(),
+            ':thumbnail' => $character->thumbnail(),
+            ':full_image' => $character->image(),
+            ':royal' => $character->royal(),
+            ':nickname' => $character->nickname()
+        ];
+
+        return $this->pdo->updateOrDelete($sql, $parameters);
+    }
+
+
     public function addHouses(int $characterId, int ...$houseIds): bool
     {
         $this->pdo->connect();
@@ -137,9 +162,8 @@ class MySqlCharacterWriterRepository extends MySqlAbstractRepository implements 
                     // The only way it is null is because the other one is filled
                     $parameters[":character_id{$key}"] = $relation->characterId() ?? $characterId;
                     $parameters[":related_to_id{$key}"] = $relation->relatedId() ?? $characterId;
-                    $insertValues[] = "(:character_id{$key}, :name{$key},:link{$key},:seasons{$key})";
+                    $insertValues[] = "(:character_id{$key}, :related_to_id{$key},:relation{$key})";
                 }
-                $parameters[':character_id'] = $characterId;
 
                 $sql = sprintf(
                     "INSERT INTO got.characters_relations (character_id,related_to_id,relation) VALUES %s;",
@@ -171,22 +195,24 @@ class MySqlCharacterWriterRepository extends MySqlAbstractRepository implements 
 
             // Delete character data
             $sql = "DELETE FROM got.characters WHERE id=:id LIMIT 1;";
-            $this->pdo->updateOrDelete($sql, $parameters);
+            $deleted = $this->pdo->updateOrDelete($sql, $parameters);
 
-            // Delete character-house data
-            $sql = "DELETE FROM got.characters_houses WHERE character_id=:id;";
-            $this->pdo->updateOrDelete($sql, $parameters);
+            if ($deleted) {
+                // Delete character-house data
+                $sql = "DELETE FROM got.characters_houses WHERE character_id=:id;";
+                $this->pdo->updateOrDelete($sql, $parameters);
 
-            // Delete character-relations data
-            $sql = "DELETE FROM got.characters_relations WHERE character_id=:id OR related_to_id=:id;";
-            $parameters = [
-                ':id' => $id
-            ];
-            $this->pdo->updateOrDelete($sql, $parameters);
+                // Delete character-relations data
+                $sql = "DELETE FROM got.characters_relations WHERE character_id=:id OR related_to_id=:id;";
+                $parameters = [
+                    ':id' => $id
+                ];
+                $this->pdo->updateOrDelete($sql, $parameters);
+            }
 
             $this->pdo->pdo()->commit();
             $this->pdo->close();
-            return true;
+            return $deleted;
         } catch (Exception $e) {
             $this->pdo->pdo()->rollBack();
             $this->pdo->close();

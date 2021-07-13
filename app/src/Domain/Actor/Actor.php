@@ -13,16 +13,19 @@ class Actor implements JsonSerializable
     public function __construct(
         string $name,
         ?string $link,
-        ?string $seasons
+        $seasons
     ) {
         $this->name = $name;
         $this->link = $link;
         $this->setSeasons($seasons);
     }
 
-    private function setSeasons(?string $seasons): void
+    private function setSeasons($seasons): void
     {
-        $this->seasons = $seasons ? json_decode($seasons, true) : [];
+        if (is_string($seasons)) {
+            $seasons = json_decode($seasons, true);
+        }
+        $this->seasons = $seasons ?? [];
     }
 
     public function name(): string

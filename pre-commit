@@ -1,0 +1,60 @@
+#!/bin/sh
+
+STAGED_FILES_CMD=`git diff --cached --name-only --diff-filter=ACMR HEAD | grep \.php`
+BAD_PHP_WORDS="^\s*(var_dump|dump).*\\(.*\\)|<<<<<<<<\W|>>>>>>>>\W|========\W$"
+# Determine if a file list is passed
+if [ "$#" -eq 1 ]
+then
+    oIFS=$IFS
+    IFS='
+    '
+    SFILES="$1"
+    IFS=$oIFS
+fi
+SFILES=${SFILES:-$STAGED_FILES_CMD}
+
+echo "\n-- Checking PHP Lint..."
+for FILE in $SFILES
+do
+    docker exec -i got_api_php_1 /bin/sh -c "php -l -d display_errors=0 /$FILE"
+    if [ $? != 0 ]
+    then
+        echo "Fix the error before commit."
+        exit 1
+    fi
+    FILES="$FILES /$FILE"
+done
+
+echo "\n-- Checking bad PHP words: var_dump, dump, ..."
+for FILE in $SFILES
+do
+    grep -H -i -n -E "${BAD_PHP_WORDS}" $FILE
+    if [ $? -eq 0 ]
+    then
+        echo "Fix the error before commit."
+        exit 1
+    fi
+done
+echo "No bad PHP words detected"
+
+# Check Code Sniffer
+if [ "$FILES" != "" ]
+then
+    echo "\n-- Running Code Sniffer. Code standard PSR12 and some extra rules."
+    docker exec -i got_api_php_1 /bin/sh -c "php /app/vendor/bin/phpcs -s --standard=PSR12 -n -p $FILES"
+
+    if [ $? != 0 ]
+    then
+        echo "Fix the error before commit!"
+        exit 1
+    fi
+fi
+
+# Check Unit Tests
+if [ "$FILES" != "" ]
+then
+    echo "Running unit Tests"
+    make test
+fi
+
+exit $?
