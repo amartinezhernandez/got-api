@@ -37,6 +37,10 @@ seed: ## Creates a new seeder
 	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx seed:create ${NAME} && chown ${USER_ID}:${USER_ID} /app/seeds/*"
 seed-run: ## Executes DB seeders
 	docker exec -it got_api_php_1 /bin/sh -c "cd /app && /app/vendor/bin/phinx seed:run"
+test: ## PHPUnit test without coverage
+	docker-compose run --rm -T php /bin/sh -c 'cd /app && ./vendor/bin/phpunit --no-coverage --color=always'
+test-coverage: ## PHPUnit test with coverage
+	docker-compose run --rm -T php /bin/sh -c 'cd /app && ./vendor/bin/phpunit --color=always'
 install: ## Installs the Api
 	@echo "\e[32mBuilding docker images\e[39m\n"
 	@make build

@@ -3,3 +3,5 @@
 docs
 app/env/env.json
 app/vendor
+app/test/report/**
+app/.phpunit.result.cache

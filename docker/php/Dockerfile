@@ -15,3 +15,7 @@ RUN apt-get install -y \
         libzip-dev \
         zip \
   && docker-php-ext-install zip
+
+# Install Xdebug
+COPY ./etc/xdebug.ini $PHP_INI_DIR/conf.d/
+RUN pecl install xdebug && docker-php-ext-enable xdebug
