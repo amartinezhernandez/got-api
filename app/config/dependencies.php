@@ -32,7 +32,9 @@ return static function (ContainerBuilder $containerBuilder) {
             return new ConfigLoader(__DIR__ . "/../env/env.json");
         },
         Elasticsearch\Client::class => function (ContainerInterface $c) {
-            return ClientBuilder::create()->setHosts(['got_api_elastic_1:9200'])->build();
+            $host = $c->get(ConfigLoader::class)->get("ELASTIC_HOST");
+            $port = $c->get(ConfigLoader::class)->get("ELASTIC_PORT");
+            return ClientBuilder::create()->setHosts([$host . ":" . $port])->build();
         }
     ]);
 };

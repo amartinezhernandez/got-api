@@ -14,6 +14,7 @@ After that, execute
 ```
 make install
 ```
+Copy the env_dist.json on app/env to app/env/env.json. The env_dist.json has the default values set, you can change them for your app.
 
 Your app will be running on 127.0.0.1:80. If you want to run it with a host, just add it to your host file
 ```
