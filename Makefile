@@ -45,8 +45,10 @@ test-coverage: ## PHPUnit test with coverage
 	@make seed-run > /dev/null
 	@docker-compose run --rm -T php /bin/sh -c 'cd /app && ./vendor/bin/phpunit --color=always'
 	@make seed-run > /dev/null
-add-hooks: ## Configurar git hook pre-commit
+add-hooks: ## Configure git hook pre-commit
 	@cd .git/hooks && ln -s ../../pre-commit pre-commit || echo 'Git Hooks already added.'
+populate-elastic: ## Populate Elasticsearch data
+	docker exec -it got_api_php_1 /bin/sh -c "php /app/public/cli.php got:populate-elastic"
 install: ## Installs the Api
 	@echo "\e[32mBuilding docker images\e[39m\n"
 	@make build

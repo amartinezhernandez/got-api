@@ -9,7 +9,7 @@ use App\Infrastructure\Repository\MySql\MySqlAbstractRepository;
 
 class MySqlCharacterReaderRepository extends MySqlAbstractRepository implements CharacterReaderRepositoryInterface
 {
-    public function listArrayOfIds(int $offset, int $limit, ?string $search): array
+    public function listArrayOfIds(?int $offset, ?int $limit, ?string $search): array
     {
         $filter = "";
         $parameters = [];
@@ -19,11 +19,15 @@ class MySqlCharacterReaderRepository extends MySqlAbstractRepository implements 
             $parameters[':search'] = "%" . $search . "%";
         }
 
+        $limitQuery = "";
+        if ($offset !== null && $limit !== null) {
+            $limitQuery = sprintf("LIMIT %d, %d", $offset, $limit);
+        }
+
         $sql = sprintf(
-            "SELECT c.id FROM got.characters c %s LIMIT %d, %d",
+            "SELECT c.id FROM got.characters c %s %s",
             $filter,
-            $offset,
-            $limit
+            $limitQuery
         );
 
         return $this->pdo->query($sql, $parameters, false, true);

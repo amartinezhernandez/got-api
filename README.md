@@ -33,5 +33,15 @@ To generate the code reports, execute the next command. The report files will be
 make test-coverage
 ```
 
+## Elasticsearch
+In order for elasticsearch to work, you must execute this in your machine (Linux):
+```
+sysctl -w vm.max_map_count=262144
+```
+The elasticsearch data can be populated using the command:
+```
+make populate-elastic
+```
+
 ## Author
 - Alberto Martínez Hernández

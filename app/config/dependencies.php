@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 use App\Infrastructure\Slim\Setting\ConfigLoader;
 use App\Infrastructure\Slim\Setting\SettingsInterface;
 use DI\ContainerBuilder;
+use Elasticsearch\ClientBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
@@ -28,6 +30,9 @@ return static function (ContainerBuilder $containerBuilder) {
         },
         ConfigLoader::class => function (ContainerInterface $c) {
             return new ConfigLoader(__DIR__ . "/../env/env.json");
+        },
+        Elasticsearch\Client::class => function (ContainerInterface $c) {
+            return ClientBuilder::create()->setHosts(['got_api_elastic_1:9200'])->build();
         }
     ]);
 };

@@ -8,6 +8,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpNotFoundException;
+use Throwable;
 
 abstract class Action
 {
@@ -34,7 +36,11 @@ abstract class Action
         $this->response = $response;
         $this->args = $args;
 
-        return $this->action();
+        try {
+            return $this->action();
+        } catch (Throwable $e) {
+            throw new HttpNotFoundException($this->request, $e->getMessage());
+        }
     }
 
     /**
